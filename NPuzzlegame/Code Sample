@@ -1,0 +1,56 @@
+ public static Node A_Star_Search(Node node)
+        {
+            total_number_of_moves = 0;
+            Node tmp_node = new Node(node.puzzle_1d, node.puzzle_dimension, node, node.cost_so_far);
+
+            while (node.heuristic_value != 0)
+            {
+                total_number_of_moves++;
+                if (node.heuristic_value == 0)
+                {
+                    return node;
+                }
+                Node node1;
+
+                if (total_number_of_moves > 30000000 && Hamming_or_Manhattan == "2")
+                {
+                    MessageBox.Show("Puzzle is not solvable with hamming distance");
+                    break;
+                }
+
+                // is up node 
+                if (node.zero_pos - node.puzzle_dimension >= 0)
+                {
+                    node.node_pos = "up";
+                    tmp_node.zero_pos = node.zero_pos - node.puzzle_dimension;
+                    Check_If_Node_Is_Parent(tmp_node, node, node1);
+                }
+
+                // is down node
+                if ((node.zero_pos + node.puzzle_dimension) < (node.puzzle_dimension * node.puzzle_dimension))
+                {
+                    node.node_pos = "down";
+                    tmp_node.zero_pos = node.zero_pos + node.puzzle_dimension;
+                    Check_If_Node_Is_Parent(tmp_node, node, node1);
+                }
+
+                // is right node
+                if ((node.zero_pos % node.puzzle_dimension) != (node.puzzle_dimension - 1))
+                {
+                    node.node_pos = "right";
+                    tmp_node.zero_pos = node.zero_pos + 1;
+                    Check_If_Node_Is_Parent(tmp_node, node, node1);
+                }
+
+                // is left node
+                if ((node.zero_pos % node.puzzle_dimension) != 0)
+                {
+                    node.node_pos = "left";
+                    tmp_node.zero_pos = node.zero_pos - 1;
+                    Check_If_Node_Is_Parent(tmp_node, node, node1);
+                }
+
+                node = priorityQueue.Dequeue();
+            }
+            return (node);
+        }
